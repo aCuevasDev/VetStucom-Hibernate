@@ -20,9 +20,8 @@ public abstract class DAO {
 
 	public static Usuarios getUser(Serializable key) {
 		Session session = HibernateUtil.getSessionFactory().openSession();
-		Query query = session.createQuery("from Usuarios where MATRICULA = '" + key + "'"); // try Usuarios u where
-																							// u.MATRICULA
-		Usuarios user = (Usuarios) query.uniqueResult();
+		Query<Usuarios> query = session.createQuery("from Usuarios where MATRICULA = '" + key + "'");
+		Usuarios user = query.uniqueResult();
 		session.close();
 		return user;
 	}

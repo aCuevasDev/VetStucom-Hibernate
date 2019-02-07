@@ -1,8 +1,8 @@
 package utils;
 
 import org.hibernate.SessionFactory;
+import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 
 /**
@@ -18,13 +18,12 @@ public class HibernateUtil {
 
 	static {
 		try {
-			// Create the SessionFactory from standard (hibernate.cfg.xml)
-			// config file.
-			Configuration configuration = new Configuration();
-			configuration.configure();
-			serviceRegistry = new StandardServiceRegistryBuilder().applySettings(configuration.getProperties()).build();
+			serviceRegistry = new StandardServiceRegistryBuilder().configure() // configures settings from
+																				// hibernate.cfg.xml
+					.build();
 
-			sessionFactory = new Configuration().configure().buildSessionFactory(serviceRegistry);
+			sessionFactory = new MetadataSources(serviceRegistry).buildMetadata().buildSessionFactory();
+
 		} catch (Throwable ex) {
 			// Log the exception.
 			System.err.println("Initial SessionFactory creation failed." + ex);
