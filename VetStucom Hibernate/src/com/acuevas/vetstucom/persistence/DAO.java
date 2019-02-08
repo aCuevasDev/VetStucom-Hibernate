@@ -1,4 +1,4 @@
-package persistence;
+package com.acuevas.vetstucom.persistence;
 
 import java.io.Serializable;
 import java.util.logging.Level;
@@ -10,8 +10,8 @@ import javax.persistence.criteria.Root;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 
-import model.Usuarios;
-import utils.HibernateUtil;
+import com.acuevas.vetstucom.model.Usuarios;
+import com.acuevas.vetstucom.utils.HibernateUtil;
 
 public abstract class DAO {
 	static {

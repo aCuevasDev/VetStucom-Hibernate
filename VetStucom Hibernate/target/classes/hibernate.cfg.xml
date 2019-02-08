@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE hibernate-configuration PUBLIC
-		"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
-		"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+                                         "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
-	<session-factory>
-		<property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-		<property name="hibernate.connection.password">vet</property>
-		<property name="hibernate.connection.url">jdbc:mysql://localhost:3306/vetstucom</property>
-		<property name="hibernate.connection.username">vet</property>
-		<mapping resource="model/Usuarios.hbm.xml" />
-		<mapping resource="model/Expedientes.hbm.xml" />
-	</session-factory>
+ <session-factory name="">
+  <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+  <property name="hibernate.connection.password">vet</property>
+  <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/vetstucom?useSSL=false</property>
+  <property name="hibernate.connection.username">vet</property>
+  <mapping resource="com/acuevas/vetstucom/config/Expedientes.hbm.xml"/>
+  <mapping resource="com/acuevas/vetstucom/config/Usuarios.hbm.xml"/>
+ </session-factory>
 </hibernate-configuration>

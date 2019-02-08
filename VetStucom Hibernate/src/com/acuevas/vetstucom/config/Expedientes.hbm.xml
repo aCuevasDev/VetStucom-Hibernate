@@ -3,12 +3,13 @@
                                    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <!-- Generated 07-feb-2019 22:47:16 by Hibernate Tools 5.3.6.Final -->
 <hibernate-mapping>
- <class catalog="vetstucom" name="model.Expedientes" table="expedientes">
+ <class catalog="vetstucom"
+  name="com.acuevas.vetstucom.model.Expedientes" table="expedientes">
   <id name="id" type="java.lang.Integer">
    <column name="ID"/>
    <generator class="identity"/>
   </id>
-  <many-to-one class="model.Usuarios" fetch="select" name="usuarios">
+  <many-to-one class="com.acuevas.vetstucom.model.Usuarios" fetch="select" name="usuarios">
    <column name="USUARIO_ALTA"/>
   </many-to-one>
   <property generated="never" lazy="false" name="nombre" type="string">

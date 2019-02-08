@@ -3,7 +3,7 @@
                                    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <!-- Generated 07-feb-2019 22:47:16 by Hibernate Tools 5.3.6.Final -->
 <hibernate-mapping>
- <class catalog="vetstucom" name="model.Usuarios" table="usuarios">
+ <class catalog="vetstucom" name="com.acuevas.vetstucom.model.Usuarios" table="usuarios">
   <id name="id" type="java.lang.Integer">
    <column name="ID"/>
    <generator class="identity"/>
@@ -34,7 +34,7 @@
    <key>
     <column name="USUARIO_ALTA"/>
    </key>
-   <one-to-many class="model.Expedientes"/>
+   <one-to-many class="com.acuevas.vetstucom.model.Expedientes"/>
   </set>
  </class>
 </hibernate-mapping>

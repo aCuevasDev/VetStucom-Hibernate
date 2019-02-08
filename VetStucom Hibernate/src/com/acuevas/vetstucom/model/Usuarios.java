@@ -1,4 +1,4 @@
-package model;
+package com.acuevas.vetstucom.model;
 
 // default package
 // Generated 07-feb-2019 22:47:16 by Hibernate Tools 5.3.6.Final
