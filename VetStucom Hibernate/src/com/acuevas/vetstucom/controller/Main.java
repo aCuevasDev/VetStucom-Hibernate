@@ -9,7 +9,9 @@ public class Main {
 	public static void main(String[] args) {
 
 		Usuarios user = DAO.getUser("alx");
-		System.out.println(user.getDni());
+		System.out.println("DNI1: " + user.getDni());
+		Usuarios user2 = DAO.test("matricula", "alx");
+		System.out.println("DNI2: " + user2.getDni());
 		HibernateUtil.close();
 	}
 
