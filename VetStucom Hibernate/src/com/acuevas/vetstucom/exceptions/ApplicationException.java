@@ -17,7 +17,6 @@ public class ApplicationException extends Exception {
 		private AppErrors(String message) {
 			this.message = message;
 		}
-
 	}
 
 	public ApplicationException(AppErrors error) {
