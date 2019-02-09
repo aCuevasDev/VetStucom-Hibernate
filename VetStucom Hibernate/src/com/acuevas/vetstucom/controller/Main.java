@@ -1,5 +1,7 @@
 package com.acuevas.vetstucom.controller;
 
+import java.util.List;
+
 import com.acuevas.vetstucom.model.Usuarios;
 import com.acuevas.vetstucom.persistence.DAO;
 import com.acuevas.vetstucom.utils.HibernateUtil;
@@ -10,8 +12,8 @@ public class Main {
 
 		Usuarios user = DAO.getUser("alx");
 		System.out.println("DNI1: " + user.getDni());
-		Usuarios user2 = DAO.test("matricula", "alx");
-		System.out.println("DNI2: " + user2.getDni());
+		List<Usuarios> user2 = DAO.test("matricula", "alx");
+		user2.forEach(System.out::println);
 		HibernateUtil.close();
 	}
 
