@@ -15,6 +15,12 @@ public abstract class DAO extends HibernateLib {
 		java.util.logging.Logger.getLogger("org.hibernate").setLevel(Level.SEVERE);
 	}
 
+	/**
+	 * Gets a user from the db based on their {@link Usuarios#matricula} property
+	 * 
+	 * @param key
+	 * @return
+	 */
 	public static Usuarios getUser(Serializable key) {
 		return find(Usuarios.class, "matricula", key);
 	}
@@ -22,7 +28,7 @@ public abstract class DAO extends HibernateLib {
 	// TODO REMOVE STATICS
 
 	/**
-	 * Checks if a Storeable object persists in the database.
+	 * Checks if a {@link Storeable} object persists in the database.
 	 * 
 	 * @param <T>
 	 * @throws UserException
