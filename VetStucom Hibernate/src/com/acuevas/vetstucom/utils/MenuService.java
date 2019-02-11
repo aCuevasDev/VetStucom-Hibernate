@@ -1,9 +1,11 @@
-package com.acuevas.vetstucom.views;
+package com.acuevas.vetstucom.utils;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import com.acuevas.vetstucom.exceptions.ApplicationException;
 import com.acuevas.vetstucom.model.UserPerfil;
+import com.acuevas.vetstucom.model.Usuarios;
 
 /**
  * Auxilary class with all the options on the user's menu.
@@ -11,7 +13,8 @@ import com.acuevas.vetstucom.model.UserPerfil;
  * @author Alex
  *
  */
-public abstract class Menu {
+public abstract class MenuService {
+	// Moved to utils since I'm doing some behaviour here.
 
 	private enum MenuMessages {
 		VIEW_RECORDS("View Records."), VIEW_USERS("View Users."), CREATE_RECORD("Create Record."),
@@ -39,11 +42,11 @@ public abstract class Menu {
 	private static MenuOption viewUsers = new MenuOption(MenuMessages.VIEW_USERS.toString(), 2, UserPerfil.VETERINARIO);
 	private static MenuOption createRecord = new MenuOption(MenuMessages.CREATE_RECORD.toString(), 3, UserPerfil.VETERINARIO);
 	private static MenuOption deleteRecord = new MenuOption(MenuMessages.DELETE_RECORD.toString(), 5, UserPerfil.VETERINARIO);
-	private static MenuOption editRecord = new MenuOption(MenuMessages.VIEW_RECORDS.toString(), 4, UserPerfil.VETERINARIO);
+	private static MenuOption editRecord = new MenuOption(MenuMessages.EDIT_RECORD.toString(), 4, UserPerfil.VETERINARIO);
 	private static MenuOption createUser = new MenuOption(MenuMessages.CREATE_USER.toString(), 6, UserPerfil.ADMIN);
 	private static MenuOption editUser = new MenuOption(MenuMessages.EDIT_USER.toString(), 7, UserPerfil.ADMIN);
 	private static MenuOption deleteUser = new MenuOption(MenuMessages.DELETE_USER.toString(), 8, UserPerfil.AUXILIAR);
-	private static MenuOption logout = new MenuOption(MenuMessages.VIEW_RECORDS.toString(), 9, UserPerfil.AUXILIAR);
+	private static MenuOption logout = new MenuOption(MenuMessages.LOGOUT.toString(), 9, UserPerfil.AUXILIAR);
 	// @formatter:on
 
 	static {
@@ -51,6 +54,27 @@ public abstract class Menu {
 		buildVetOptions();
 		buildAdminOptions();
 		buildLogOut();
+		order();
+	}
+
+	public static List<MenuOption> getMenuList(Usuarios user) throws ApplicationException {
+		UserPerfil userPerfil = UserPerfil.getUserType(user);
+		switch (userPerfil) {
+		case ADMIN:
+			return adminOptions;
+		case AUXILIAR:
+			return auxOptions;
+		case VETERINARIO:
+			return vetOptions;
+		default:
+			return null;
+		}
+	}
+
+	private static void order() {
+		auxOptions.sort(null);
+		vetOptions.sort(null);
+		adminOptions.sort(null);
 	}
 
 	private static void buildAuxOptions() {
@@ -79,47 +103,5 @@ public abstract class Menu {
 		auxOptions.add(logout);
 		vetOptions.add(logout);
 		adminOptions.add(logout);
-	}
-
-	/**
-	 * @return the auxOptions
-	 */
-	public static List<MenuOption> getAuxOptions() {
-		return auxOptions;
-	}
-
-	/**
-	 * @param auxOptions the auxOptions to set
-	 */
-	public static void setAuxOptions(List<MenuOption> auxOptions) {
-		Menu.auxOptions = auxOptions;
-	}
-
-	/**
-	 * @return the vetOptions
-	 */
-	public static List<MenuOption> getVetOptions() {
-		return vetOptions;
-	}
-
-	/**
-	 * @param vetOptions the vetOptions to set
-	 */
-	public static void setVetOptions(List<MenuOption> vetOptions) {
-		Menu.vetOptions = vetOptions;
-	}
-
-	/**
-	 * @return the adminOptions
-	 */
-	public static List<MenuOption> getAdminOptions() {
-		return adminOptions;
-	}
-
-	/**
-	 * @param adminOptions the adminOptions to set
-	 */
-	public static void setAdminOptions(List<MenuOption> adminOptions) {
-		Menu.adminOptions = adminOptions;
 	}
 }

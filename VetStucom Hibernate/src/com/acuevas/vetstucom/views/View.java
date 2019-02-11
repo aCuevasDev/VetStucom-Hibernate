@@ -1,6 +1,9 @@
 package com.acuevas.vetstucom.views;
 
+import java.util.List;
+
 import com.acuevas.vetstucom.model.Usuarios;
+import com.acuevas.vetstucom.utils.MenuOption;
 
 public class View {
 
@@ -41,7 +44,13 @@ public class View {
 		public String toString() {
 			return super.toString();
 		}
+	}
 
+	public static void printMenu(List<MenuOption> options) {
+		int index = 1;
+		for (MenuOption menuOption : options) {
+			System.out.println(index++ + ". " + menuOption.getMessage());
+		}
 	}
 
 	public static void printError(String error) {

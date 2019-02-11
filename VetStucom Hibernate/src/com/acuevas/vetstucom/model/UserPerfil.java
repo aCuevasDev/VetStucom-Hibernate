@@ -11,9 +11,15 @@ import com.acuevas.vetstucom.exceptions.ApplicationException.AppErrors;
  *
  */
 public enum UserPerfil {
-	AUXILIAR, VETERINARIO, ADMIN;
+	AUXILIAR(1), VETERINARIO(2), ADMIN(3);
 
-	public UserPerfil getUserType(Usuarios user) throws ApplicationException {
+	int value;
+
+	private UserPerfil(int value) {
+		this.value = value;
+	}
+
+	public static UserPerfil getUserType(Usuarios user) throws ApplicationException {
 		switch (user.getTipoUsuario()) {
 		case 1:
 			return UserPerfil.AUXILIAR;
@@ -25,6 +31,12 @@ public enum UserPerfil {
 		default:
 			throw new ApplicationException(AppErrors.TYPE_DOESNT_EXIST);
 		}
+	}
+
+	public static boolean isAllowed(Usuarios user, UserPerfil userPerfil) throws ApplicationException {
+		if (getUserType(user).value >= userPerfil.value)
+			return true;
+		return false;
 	}
 }
 

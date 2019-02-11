@@ -1,16 +1,34 @@
 package com.acuevas.vetstucom.controller;
 
+import java.util.List;
+
+import com.acuevas.vetstucom.exceptions.ApplicationException;
 import com.acuevas.vetstucom.exceptions.DBException;
 import com.acuevas.vetstucom.exceptions.UserException;
 import com.acuevas.vetstucom.exceptions.UserException.UserErrors;
 import com.acuevas.vetstucom.model.Usuarios;
 import com.acuevas.vetstucom.persistence.DAO;
+import com.acuevas.vetstucom.utils.MenuOption;
+import com.acuevas.vetstucom.utils.MenuService;
 import com.acuevas.vetstucom.views.View;
 import com.acuevas.vetstucom.views.View.ViewMessage;
 
 public abstract class Controller {
 
-	private Usuarios loggedInUser = null;
+	private static Usuarios loggedInUser = null;
+
+	public static void showMenu() throws ApplicationException {
+		List<MenuOption> listMenu = MenuService.getMenuList(loggedInUser);
+		View.printMenu(listMenu);
+	}
+
+	public static void menuSelector() {
+		boolean exit = false;
+
+		do {
+
+		} while (exit); // TODO CHANGE THIS BOOLEAN, AND THE VALUE IS WRONG ON PURPOSE
+	}
 
 // TODO WHEN A WRONG_CREDENTIALS ERROR IS THROWN SAY TO THE USER TO BE CAREFULL WITH CAPS
 	/**
@@ -18,7 +36,7 @@ public abstract class Controller {
 	 * 
 	 * @throws UserException
 	 */
-	public void logIn() throws UserException {
+	public static void logIn() throws UserException {
 		View.printMessage(ViewMessage.INSERT_MATRICULA);
 		String matricula = InputAsker.pedirCadena("");
 		View.printMessage(ViewMessage.INSERT_PASSWORD);
@@ -46,7 +64,7 @@ public abstract class Controller {
 	 * @param storedUser
 	 * @throws UserException
 	 */
-	private void checkCredentials(String matricula, String pswrd, Usuarios storedUser) throws UserException {
+	private static void checkCredentials(String matricula, String pswrd, Usuarios storedUser) throws UserException {
 		if (matricula.equals(storedUser.getMatricula()))
 			if (pswrd.equals(storedUser.getPass()))
 				return;
