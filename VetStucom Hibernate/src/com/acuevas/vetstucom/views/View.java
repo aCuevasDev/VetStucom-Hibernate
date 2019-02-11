@@ -10,7 +10,7 @@ public class View {
 	public enum ViewMessage {
 
 		WELCOME("Welcome"), INSERT_MATRICULA("Please insert your username"),
-		INSERT_PASSWORD("Please insert your password");
+		INSERT_PASSWORD("Please insert your password"), INSERT_OPTION("Please insert an option.");
 
 		private String message;
 

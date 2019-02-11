@@ -13,6 +13,8 @@ import com.acuevas.vetstucom.model.Usuarios;
  */
 public class MenuOption implements Comparable<MenuOption> {
 
+	// SAVE ACTIONS HERE? WITH AN ENUM AND THEN CONTROLLER MAKES THE CALLS?
+
 	private String message;
 	private int order;
 	private UserPerfil profile;

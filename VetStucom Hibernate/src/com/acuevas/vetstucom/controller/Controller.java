@@ -20,13 +20,33 @@ public abstract class Controller {
 	public static void showMenu() throws ApplicationException {
 		List<MenuOption> listMenu = MenuService.getMenuList(loggedInUser);
 		View.printMenu(listMenu);
+		View.printMessage(ViewMessage.WELCOME + " " + loggedInUser.getNombre());
 	}
 
 	public static void menuSelector() {
 		boolean exit = false;
 
 		do {
+			View.printMessage(ViewMessage.INSERT_OPTION);
+			int input = InputAsker.pedirEntero("");
+			switch (input) {
+			case 1:
 
+				break;
+			case 2:
+				break;
+			case 3:
+				break;
+			case 4:
+				break;
+			case 5:
+				break;
+			case 6:
+				break;
+
+			default:
+				break;
+			}
 		} while (exit); // TODO CHANGE THIS BOOLEAN, AND THE VALUE IS WRONG ON PURPOSE
 	}
 

@@ -13,7 +13,7 @@ public class Main {
 
 		try {
 			Controller.logIn();
-			Controller.menu();
+			Controller.showMenu();
 		} catch (ApplicationException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
