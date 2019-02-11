@@ -13,6 +13,21 @@ import com.acuevas.vetstucom.model.Usuarios;
  */
 public class MenuOption implements Comparable<MenuOption> {
 
+	public enum Actions {
+		VIEW_RECORDS, VIEW_USERS, CREATE_RECORD, EDIT_RECORD, DELETE_RECORD, CREATE_USER, EDIT_USER, DELETE_USER, LOGOUT
+		
+		private String message;
+
+		private MenuMessages(String message) {
+			this.message = message;
+		}
+
+		@Override
+		public String toString() {
+			return this.message;
+		}
+	}
+
 	// SAVE ACTIONS HERE? WITH AN ENUM AND THEN CONTROLLER MAKES THE CALLS?
 
 	private String message;
