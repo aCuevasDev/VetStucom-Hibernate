@@ -35,7 +35,7 @@ public abstract class Controller {
 			throw new ApplicationException(AppErrors.USER_MUST_BE_LOGGED);
 
 		View.printMessage(ViewMessage.WELCOME + " " + loggedInUser.getNombre().substring(0, 1).toUpperCase()
-				+ loggedInUser.getNombre().substring(1, loggedInUser.getNombre().length() - 1));
+				+ loggedInUser.getNombre().substring(1, loggedInUser.getNombre().length()));
 	}
 
 	/**
@@ -116,7 +116,7 @@ public abstract class Controller {
 		Usuarios user;
 		do {
 			View.printMessage(ViewMessage.ASK_USER);
-			String matricula = InputAsker.pedirCadena("");
+			String matricula = InputAsker.askStringWithLenght(6);
 			user = VetDAO.getUser(matricula);
 			if (user == null)
 				View.printMessage(ViewMessage.WRONG_ID);
@@ -147,22 +147,22 @@ public abstract class Controller {
 			switch (option) {
 			case 1:
 				View.printMessage(ViewMessage.ASK_DATA);
-				data = InputAsker.pedirCadena("");
+				data = InputAsker.askStringWithLenght(25);
 				user.setNombre(data);
 				break;
 			case 2:
 				View.printMessage(ViewMessage.ASK_DATA);
-				data = InputAsker.pedirCadena("");
+				data = InputAsker.askStringWithLenght(25);
 				user.setApellidos(data);
 				break;
 			case 3:
 				View.printMessage(ViewMessage.ASK_DATA);
-				data = InputAsker.pedirCadena("");
+				data = InputAsker.askStringWithLenght(12);
 				user.setDni(data);
 				break;
 			case 4:
 				View.printMessage(ViewMessage.ASK_DATA);
-				data = InputAsker.pedirCadena("");
+				data = InputAsker.askStringWithLenght(8);
 				user.setPass(data);
 				break;
 			case 5:
@@ -232,7 +232,7 @@ public abstract class Controller {
 			case 1:
 				do {
 					View.printMessage(ViewMessage.ASK_MATRICULA);
-					String matricula = InputAsker.pedirCadena("");
+					String matricula = InputAsker.askStringWithLenght(6);
 					user = VetDAO.getUser(matricula);
 					if (user != null) {
 						record.setUsuarios(user);
@@ -242,17 +242,17 @@ public abstract class Controller {
 				break;
 			case 2:
 				View.printMessage(ViewMessage.ASK_DATA);
-				data = InputAsker.pedirCadena("");
+				data = InputAsker.askStringWithLenght(30);
 				record.setNombre(data);
 				break;
 			case 3:
 				View.printMessage(ViewMessage.ASK_DATA);
-				data = InputAsker.pedirCadena("");
+				data = InputAsker.askStringWithLenght(30);
 				record.setApellidos(data);
 				break;
 			case 4:
 				View.printMessage(ViewMessage.ASK_DATA);
-				data = InputAsker.pedirCadena("");
+				data = InputAsker.askStringWithLenght(12);
 				record.setDni(data);
 				break;
 			case 5:
@@ -311,8 +311,8 @@ public abstract class Controller {
 	 */
 	private static void deleteUser() throws DBException {
 		View.printMessage(ViewMessage.DELETE_USERNAME_USER);
-		String matricula = InputAsker.pedirCadena("");
-		if (matricula != loggedInUser.getMatricula()) {
+		String matricula = InputAsker.askStringWithLenght(6);
+		if (!matricula.equals(loggedInUser.getMatricula())) {
 			VetDAO.deleteUser(matricula);
 			View.printMessage(ViewMessage.DELETED_SUCESS);
 		} else
@@ -327,19 +327,19 @@ public abstract class Controller {
 	private static void createUser() throws UserException {
 
 		View.printMessage(ViewMessage.NAME_USER);
-		String name = InputAsker.pedirCadena("");
+		String name = InputAsker.askStringWithLenght(25);
 		View.printMessage(ViewMessage.SURNAME_USER);
-		String surname = InputAsker.pedirCadena("");
+		String surname = InputAsker.askStringWithLenght(25);
 		View.printMessage(ViewMessage.DNI_USER);
-		String dni = InputAsker.pedirCadena("");
+		String dni = InputAsker.askStringWithLenght(12);
 		View.printMessage(ViewMessage.ASK_MATRICULA);
-		String matricula = InputAsker.pedirCadena("");
+		String matricula = InputAsker.askStringWithLenght(6);
 
 		if (VetDAO.getUser(matricula) == null) {
 
 			Date curdate = new Date(); // last access
 			View.printMessage(ViewMessage.ASK_PASSWORD);
-			String pass = InputAsker.pedirCadena("");
+			String pass = InputAsker.askStringWithLenght(8);
 			View.printMessage(ViewMessage.ASK_TIPO);
 			Integer tipo = InputAsker.pedirEntero("");
 
@@ -386,11 +386,11 @@ public abstract class Controller {
 	private static void createRecord() {
 
 		View.printMessage(ViewMessage.NAME_CLIENT);
-		String name = InputAsker.pedirCadena("");
+		String name = InputAsker.askStringWithLenght(30);
 		View.printMessage(ViewMessage.SURNAME_CLIENT);
-		String surname = InputAsker.pedirCadena("");
+		String surname = InputAsker.askStringWithLenght(30);
 		View.printMessage(ViewMessage.DNI_CLIENT);
-		String dni = InputAsker.pedirCadena("");
+		String dni = InputAsker.askStringWithLenght(12);
 		View.printMessage(ViewMessage.POSTAL_CODE);
 		int cp = InputAsker.pedirEntero("");
 		Date curdate = new Date();

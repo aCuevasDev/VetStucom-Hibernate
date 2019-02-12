@@ -115,7 +115,8 @@ public abstract class InputAsker {
 		String result;
 		do {
 			result = pedirCadena("");
-			View.printError(ViewError.TOO_LONG);
+			if (result.length() > lenght)
+				View.printError(ViewError.TOO_LONG);
 		} while (result.length() > lenght);
 		return result;
 	}
