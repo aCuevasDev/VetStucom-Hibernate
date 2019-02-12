@@ -26,7 +26,6 @@ public abstract class HibernateLib {
 		return result;
 	}
 
-//TODO ADD TO DOCUMENTATION: IM SAVING THE RESULT IN A VARIABLE BECAUSE I CAN'T CLOSE THE SESION AND THEN CALL QUERY.LIST
 	public static <T> List<T> find(Class<T> objClass) {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		Query<T> query = session.createQuery("from " + objClass.getSimpleName());

@@ -25,18 +25,35 @@ public abstract class Controller {
 	private static Usuarios loggedInUser = null;
 	private static List<MenuOption> listMenu = null;
 
+	/**
+	 * HELLO!
+	 * 
+	 * @throws ApplicationException
+	 */
 	public static void welcome() throws ApplicationException {
 		if (loggedInUser == null)
 			throw new ApplicationException(AppErrors.USER_MUST_BE_LOGGED);
 
-		View.printMessage(ViewMessage.WELCOME + " " + loggedInUser.getNombre());
+		View.printMessage(ViewMessage.WELCOME + " " + loggedInUser.getNombre().substring(0, 1).toUpperCase()
+				+ loggedInUser.getNombre().substring(1, loggedInUser.getNombre().length() - 1));
 	}
 
+	/**
+	 * Shows the menu
+	 * 
+	 * @throws ApplicationException
+	 */
 	private static void showMenu() throws ApplicationException {
 		listMenu = MenuService.getMenuList(loggedInUser);
 		View.printMenu(listMenu);
 	}
 
+	/**
+	 * Selector with the options available to the user.
+	 * 
+	 * @throws UserException
+	 * @throws ApplicationException
+	 */
 	public static void menuSelector() throws UserException, ApplicationException {
 		boolean exit = false;
 
@@ -66,7 +83,7 @@ public abstract class Controller {
 						deleteUser();
 						break;
 					case EDIT_USER:
-						// TODO THIS
+						exit = editUser();
 						break;
 					case LOGOUT:
 						View.printMessage(ViewMessage.SEE_YOU);
@@ -84,12 +101,99 @@ public abstract class Controller {
 					}
 				} catch (DBException e) {
 					View.printError(e.getMessage());
+				} catch (UserException e) {
+					View.printError(e.getMessage());
 				}
 			} else
 				throw new UserException(UserErrors.OPTION_NOT_VALID);
 		} while (!exit);
 	}
 
+	/**
+	 * Edits the user and uploads it to the DB.
+	 */
+	private static Boolean editUser() {
+		Usuarios user;
+		do {
+			View.printMessage(ViewMessage.ASK_USER);
+			String matricula = InputAsker.pedirCadena("");
+			user = VetDAO.getUser(matricula);
+			if (user == null)
+				View.printMessage(ViewMessage.WRONG_ID);
+		} while (user == null);
+
+		View.printMessage(ViewMessage.SEPARATOR);
+		View.printMessage(user.toString());
+		View.printMessage(ViewMessage.SEPARATOR);
+
+		return userPropertiesSelector(user);
+	}
+
+	/**
+	 * Switch selector with the modifiable properties of {@link Usuarios} and the
+	 * actions to modify them.
+	 * 
+	 * @param user
+	 */
+	private static Boolean userPropertiesSelector(Usuarios user) {
+		int option;
+		String data;
+		int num;
+		do {
+			View.printMessage(ViewMessage.ASK_MODIFY);
+			View.printUserProperties();
+
+			option = InputAsker.pedirEntero("");
+			switch (option) {
+			case 1:
+				View.printMessage(ViewMessage.ASK_DATA);
+				data = InputAsker.pedirCadena("");
+				user.setNombre(data);
+				break;
+			case 2:
+				View.printMessage(ViewMessage.ASK_DATA);
+				data = InputAsker.pedirCadena("");
+				user.setApellidos(data);
+				break;
+			case 3:
+				View.printMessage(ViewMessage.ASK_DATA);
+				data = InputAsker.pedirCadena("");
+				user.setDni(data);
+				break;
+			case 4:
+				View.printMessage(ViewMessage.ASK_DATA);
+				data = InputAsker.pedirCadena("");
+				user.setPass(data);
+				break;
+			case 5:
+				do {
+					View.printMessage(ViewMessage.ASK_DATA);
+					num = InputAsker.pedirEntero("");
+					if (num < 1 || num > 3)
+						View.printError(ViewError.WRONG_TYPE);
+				} while (num < 1 || num > 3);
+				user.setTipoUsuario(num);
+
+				// if the user modifies its type, he must be logged out to load new options on
+				// the menu
+				if (user.getMatricula().equals(loggedInUser.getMatricula())) {
+					VetDAO.store(user);
+					return true;
+				}
+			case 6:
+				VetDAO.store(user);
+				break;
+			default:
+				View.printError(ViewError.NO_SUCH_OPTION);
+				break;
+			}
+		} while (option != 6);
+		return false;
+	}
+
+	/**
+	 * Edits a record and updates it to DB
+	 */
 	private static void editRecord() {
 		Expedientes record;
 		do {
@@ -108,10 +212,17 @@ public abstract class Controller {
 
 	}
 
+	/**
+	 * Switch selector with the modifiable properties of {@link Usuarios} and the
+	 * actions to modify them.
+	 * 
+	 * @param record
+	 */
 	private static void recordPropertiesSelector(Expedientes record) {
 		int option;
 		String data;
 		int num;
+		Usuarios user;
 		do {
 			View.printMessage(ViewMessage.ASK_MODIFY);
 			View.printRecordProperties();
@@ -119,13 +230,15 @@ public abstract class Controller {
 			option = InputAsker.pedirEntero("");
 			switch (option) {
 			case 1:
-				View.printMessage(ViewMessage.ASK_MATRICULA);
-				String matricula = InputAsker.pedirCadena("");
-				Usuarios user = VetDAO.getUser(matricula);
-				if (user != null) {
-					record.setUsuarios(user);
-				} else
-					View.printError(ViewError.NO_SUCH_USER);
+				do {
+					View.printMessage(ViewMessage.ASK_MATRICULA);
+					String matricula = InputAsker.pedirCadena("");
+					user = VetDAO.getUser(matricula);
+					if (user != null) {
+						record.setUsuarios(user);
+					} else
+						View.printError(ViewError.NO_SUCH_USER);
+				} while (user == null);
 				break;
 			case 2:
 				View.printMessage(ViewMessage.ASK_DATA);
@@ -199,8 +312,11 @@ public abstract class Controller {
 	private static void deleteUser() throws DBException {
 		View.printMessage(ViewMessage.DELETE_USERNAME_USER);
 		String matricula = InputAsker.pedirCadena("");
-		VetDAO.deleteUser(matricula);
-		View.printMessage(ViewMessage.DELETED_SUCESS);
+		if (matricula != loggedInUser.getMatricula()) {
+			VetDAO.deleteUser(matricula);
+			View.printMessage(ViewMessage.DELETED_SUCESS);
+		} else
+			View.printError(ViewError.CANNOT_DELETE_SELF);
 	}
 
 	/**
@@ -268,31 +384,25 @@ public abstract class Controller {
 	 * Creates a new record.
 	 */
 	private static void createRecord() {
-		boolean error = false;
-		boolean exit = false;
 
-		if (!exit) {
-			View.printMessage(ViewMessage.NAME_CLIENT);
-			String name = InputAsker.pedirCadena("");
-			View.printMessage(ViewMessage.SURNAME_CLIENT);
-			String surname = InputAsker.pedirCadena("");
-			View.printMessage(ViewMessage.DNI_CLIENT);
-			String dni = InputAsker.pedirCadena("");
-			View.printMessage(ViewMessage.POSTAL_CODE);
-			int cp = InputAsker.pedirEntero("");
-			Date curdate = new Date();
-			View.printMessage(ViewMessage.PHONE_CLIENT);
-			int phone = InputAsker.pedirEntero("");
-			View.printMessage(ViewMessage.PETS);
-			int pets = InputAsker.pedirEntero("");
+		View.printMessage(ViewMessage.NAME_CLIENT);
+		String name = InputAsker.pedirCadena("");
+		View.printMessage(ViewMessage.SURNAME_CLIENT);
+		String surname = InputAsker.pedirCadena("");
+		View.printMessage(ViewMessage.DNI_CLIENT);
+		String dni = InputAsker.pedirCadena("");
+		View.printMessage(ViewMessage.POSTAL_CODE);
+		int cp = InputAsker.pedirEntero("");
+		Date curdate = new Date();
+		View.printMessage(ViewMessage.PHONE_CLIENT);
+		int phone = InputAsker.pedirEntero("");
+		View.printMessage(ViewMessage.PETS);
+		int pets = InputAsker.pedirEntero("");
 
-			Expedientes expediente = new Expedientes(loggedInUser, name, surname, dni, "" + cp, curdate, "" + phone,
-					pets);
-			VetDAO.store(expediente);
-		}
+		Expedientes expediente = new Expedientes(loggedInUser, name, surname, dni, "" + cp, curdate, "" + phone, pets);
+		VetDAO.store(expediente);
 	}
 
-// TODO WHEN A WRONG_CREDENTIALS ERROR IS THROWN SAY TO THE USER TO BE CAREFULL WITH CAPS
 	/**
 	 * Logs the user into the system asking for his credentials.
 	 * 
@@ -314,6 +424,8 @@ public abstract class Controller {
 
 		checkCredentials(matricula, pswrd, storedUser);
 		loggedInUser = storedUser;
+		storedUser.setUltimoAcceso(new Date());
+		VetDAO.store(storedUser);
 		View.printMessage(ViewMessage.COMPLETE);
 		welcome();
 	}

@@ -13,8 +13,6 @@ import com.acuevas.vetstucom.views.View.ViewMessage;
 
 public class Main {
 
-	// TODO DEACTIVATE LAZY "failed to layzily init"
-
 	public static void main(String[] args) {
 		try {
 			selector();
@@ -36,6 +34,7 @@ public class Main {
 			option = InputAsker.pedirEntero("");
 			switch (option) {
 			case 1:
+
 				try {
 					Controller.logIn();
 					Controller.menuSelector();

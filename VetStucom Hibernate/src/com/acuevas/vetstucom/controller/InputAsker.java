@@ -4,6 +4,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import com.acuevas.vetstucom.views.View;
+import com.acuevas.vetstucom.views.View.ViewError;
+
 /**
  * Methods to ask the user input options
  *
@@ -106,6 +109,15 @@ public abstract class InputAsker {
 			}
 		} while (error);
 		return false;
+	}
+
+	public static String askStringWithLenght(int lenght) {
+		String result;
+		do {
+			result = pedirCadena("");
+			View.printError(ViewError.TOO_LONG);
+		} while (result.length() > lenght);
+		return result;
 	}
 
 }

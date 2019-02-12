@@ -25,7 +25,8 @@ public class View {
 		LOADING("--------------LOADING-------------"), COMPLETE("--------------COMPLETE-------------"),
 		SEE_YOU("See you!"), SEPARATOR("***************************************"),
 		ASK_RECORD("Insert the ID of the record you want to modify"), WRONG_ID("Wrong ID, Object doesn't exist"),
-		ASK_MODIFY("What do you want to modify?"), ASK_DATA("Insert the new value");
+		ASK_MODIFY("What do you want to modify?"), ASK_DATA("Insert the new value"),
+		ASK_USER("Insert the username of the user you want to modify.");
 
 		private String message;
 
@@ -47,7 +48,9 @@ public class View {
 
 	public enum ViewError {
 		ID_ALREADY_EXISTS("This id already exists."), NO_SUCH_OPTION("There's no such option"),
-		CRITICAL("CRITICAL ERROR, CLOSING NOW"), NO_SUCH_USER("THERE'S NO SUCH USER");
+		CRITICAL("CRITICAL ERROR, CLOSING NOW"), NO_SUCH_USER("THERE'S NO SUCH USER"),
+		WRONG_TYPE("Wrong type, values must be between 1-3"), CANNOT_DELETE_SELF("You can't delete yourself."),
+		TOO_LONG("Value is too long");
 
 		private String message;
 
@@ -77,6 +80,15 @@ public class View {
 		System.out.println("6. Phone");
 		System.out.println("7. Pet number");
 		System.out.println("8. Exit");
+	}
+
+	public static void printUserProperties() {
+		System.out.println("1. Name");
+		System.out.println("2. Surname");
+		System.out.println("3. Dni");
+		System.out.println("4. Password");
+		System.out.println("5. Type");
+		System.out.println("6. Exit");
 	}
 
 	public static void printError(String error) {
