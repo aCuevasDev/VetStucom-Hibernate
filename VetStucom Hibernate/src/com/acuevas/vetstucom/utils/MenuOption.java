@@ -13,14 +13,14 @@ import com.acuevas.vetstucom.model.Usuarios;
  */
 public class MenuOption implements Comparable<MenuOption> {
 
-	public enum Actions {
+	public enum Action {
 		VIEW_RECORDS("View Records."), VIEW_USERS("View Users."), CREATE_RECORD("Create Record."),
 		DELETE_RECORD("Delete Record."), EDIT_RECORD("Edit Record."), CREATE_USER("Create User."),
 		EDIT_USER("Edit User."), DELETE_USER("Delete User."), LOGOUT("Log out.");
 
 		private String message;
 
-		private Actions(String message) {
+		private Action(String message) {
 			this.message = message;
 		}
 
@@ -30,14 +30,12 @@ public class MenuOption implements Comparable<MenuOption> {
 		}
 	}
 
-	// SAVE ACTIONS HERE? WITH AN ENUM AND THEN CONTROLLER MAKES THE CALLS?
-
-	private String message;
+	private Action action;
 	private int order;
 	private UserPerfil profile;
 
-	public MenuOption(String message, int order, UserPerfil profile) {
-		this.message = message;
+	public MenuOption(Action action, int order, UserPerfil profile) {
+		this.action = action;
 		this.order = order;
 		this.profile = profile;
 	}
@@ -45,20 +43,6 @@ public class MenuOption implements Comparable<MenuOption> {
 	@Override
 	public int compareTo(MenuOption option) {
 		return this.order - option.order;
-	}
-
-	/**
-	 * @return the message
-	 */
-	public String getMessage() {
-		return message;
-	}
-
-	/**
-	 * @param message the message to set
-	 */
-	public void setMessage(String message) {
-		this.message = message;
 	}
 
 	/**
@@ -87,6 +71,20 @@ public class MenuOption implements Comparable<MenuOption> {
 	 */
 	public void setProfile(UserPerfil profile) {
 		this.profile = profile;
+	}
+
+	/**
+	 * @return the action
+	 */
+	public Action getAction() {
+		return action;
+	}
+
+	/**
+	 * @param action the action to set
+	 */
+	public void setAction(Action action) {
+		this.action = action;
 	}
 
 }

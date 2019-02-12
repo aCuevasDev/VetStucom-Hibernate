@@ -9,8 +9,15 @@ public class View {
 
 	public enum ViewMessage {
 
-		WELCOME("Welcome"), INSERT_MATRICULA("Please insert your username"),
-		INSERT_PASSWORD("Please insert your password"), INSERT_OPTION("Please insert an option.");
+		WELCOME("Welcome"), INSERT_MATRICULA("Please insert your username:"),
+		INSERT_PASSWORD("Please insert your password:"), INSERT_OPTION("Please insert an option."),
+		INSERT_ID("Please insert the id:"), NAME("Please insert your name:"),
+		NAME_CLIENT("Please insert the name of the client:"),
+		SURNAME_CLIENT("Please insert the surname of the client:"), DNI_CLIENT("Please insert the DNI of the client:"),
+		POSTAL_CODE("Please insert the postal code of the client:"),
+		PHONE_CLIENT("Please insert the phone of the client:"),
+		PETS(("Please insert the number of pets the client has:")), PRESS_TO_EXIT("Insert -1 to exit"),
+		DELETE_ID_RECORD("Insert the ID of the record you want to delete."), DELETED_SUCESS("Deleted successfully.");
 
 		private String message;
 
@@ -31,8 +38,7 @@ public class View {
 	}
 
 	public enum ViewError {
-		// TODO
-		TODO("");
+		ID_ALREADY_EXISTS("This id already exists.");
 
 		private String message;
 
@@ -49,7 +55,7 @@ public class View {
 	public static void printMenu(List<MenuOption> options) {
 		int index = 1;
 		for (MenuOption menuOption : options) {
-			System.out.println(index++ + ". " + menuOption.getMessage());
+			System.out.println(index++ + ". " + menuOption.getAction().toString());
 		}
 	}
 

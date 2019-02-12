@@ -6,6 +6,7 @@ import java.util.List;
 import com.acuevas.vetstucom.exceptions.ApplicationException;
 import com.acuevas.vetstucom.model.UserPerfil;
 import com.acuevas.vetstucom.model.Usuarios;
+import com.acuevas.vetstucom.utils.MenuOption.Action;
 
 /**
  * Auxilary class with all the options on the user's menu.
@@ -16,37 +17,20 @@ import com.acuevas.vetstucom.model.Usuarios;
 public abstract class MenuService {
 	// Moved to utils since I'm doing some behaviour here.
 
-	private enum MenuMessages {
-		VIEW_RECORDS("View Records."), VIEW_USERS("View Users."), CREATE_RECORD("Create Record."),
-		DELETE_RECORD("Delete Record."), EDIT_RECORD("Edit Record."), CREATE_USER("Create User."),
-		EDIT_USER("Edit User."), DELETE_USER("Delete User."), LOGOUT("Log out.");
-
-		private String message;
-
-		private MenuMessages(String message) {
-			this.message = message;
-		}
-
-		@Override
-		public String toString() {
-			return this.message;
-		}
-	}
-
 	private static List<MenuOption> auxOptions = new ArrayList<>();
 	private static List<MenuOption> vetOptions = new ArrayList<>();
 	private static List<MenuOption> adminOptions = new ArrayList<>();
 
 	// @formatter:off
-	private static MenuOption viewRecords = new MenuOption(MenuMessages.VIEW_RECORDS.toString(), 1, UserPerfil.AUXILIAR);
-	private static MenuOption viewUsers = new MenuOption(MenuMessages.VIEW_USERS.toString(), 2, UserPerfil.VETERINARIO);
-	private static MenuOption createRecord = new MenuOption(MenuMessages.CREATE_RECORD.toString(), 3, UserPerfil.VETERINARIO);
-	private static MenuOption deleteRecord = new MenuOption(MenuMessages.DELETE_RECORD.toString(), 5, UserPerfil.VETERINARIO);
-	private static MenuOption editRecord = new MenuOption(MenuMessages.EDIT_RECORD.toString(), 4, UserPerfil.VETERINARIO);
-	private static MenuOption createUser = new MenuOption(MenuMessages.CREATE_USER.toString(), 6, UserPerfil.ADMIN);
-	private static MenuOption editUser = new MenuOption(MenuMessages.EDIT_USER.toString(), 7, UserPerfil.ADMIN);
-	private static MenuOption deleteUser = new MenuOption(MenuMessages.DELETE_USER.toString(), 8, UserPerfil.AUXILIAR);
-	private static MenuOption logout = new MenuOption(MenuMessages.LOGOUT.toString(), 9, UserPerfil.AUXILIAR);
+	private static MenuOption viewRecords = new MenuOption(Action.VIEW_RECORDS, 1, UserPerfil.AUXILIAR);
+	private static MenuOption viewUsers = new MenuOption(Action.VIEW_USERS, 2, UserPerfil.VETERINARIO);
+	private static MenuOption createRecord = new MenuOption(Action.CREATE_RECORD, 3, UserPerfil.VETERINARIO);
+	private static MenuOption deleteRecord = new MenuOption(Action.DELETE_RECORD, 5, UserPerfil.VETERINARIO);
+	private static MenuOption editRecord = new MenuOption(Action.EDIT_RECORD, 4, UserPerfil.VETERINARIO);
+	private static MenuOption createUser = new MenuOption(Action.CREATE_USER, 6, UserPerfil.ADMIN);
+	private static MenuOption editUser = new MenuOption(Action.EDIT_USER, 7, UserPerfil.ADMIN);
+	private static MenuOption deleteUser = new MenuOption(Action.DELETE_USER, 8, UserPerfil.AUXILIAR);
+	private static MenuOption logout = new MenuOption(Action.LOGOUT, 9, UserPerfil.AUXILIAR);
 	// @formatter:on
 
 	static {
