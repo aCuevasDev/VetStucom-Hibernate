@@ -107,4 +107,16 @@ public class Expedientes implements java.io.Serializable, Storeable {
 		this.NMascotas = NMascotas;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "Record: [id=" + id + ", User=" + usuarios.getMatricula() + ", Client Name=" + nombre
+				+ ", Client Surname=" + apellidos + ", DNI=" + dni + ", CP=" + cp + ", DATE =" + fechaAlta
+				+ ", Phone number=" + telefono + ", Number of pets =" + NMascotas + "]";
+	}
+
 }

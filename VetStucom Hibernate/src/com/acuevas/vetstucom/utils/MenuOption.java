@@ -16,7 +16,7 @@ public class MenuOption implements Comparable<MenuOption> {
 	public enum Action {
 		VIEW_RECORDS("View Records."), VIEW_USERS("View Users."), CREATE_RECORD("Create Record."),
 		DELETE_RECORD("Delete Record."), EDIT_RECORD("Edit Record."), CREATE_USER("Create User."),
-		EDIT_USER("Edit User."), DELETE_USER("Delete User."), LOGOUT("Log out.");
+		EDIT_USER("Edit User."), DELETE_USER("Delete User."), LOGOUT("Log out."), EXIT("Exit."), LOGIN("Log in.");
 
 		private String message;
 

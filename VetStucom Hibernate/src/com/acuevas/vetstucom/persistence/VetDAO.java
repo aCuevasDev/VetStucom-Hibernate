@@ -1,14 +1,21 @@
 package com.acuevas.vetstucom.persistence;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.logging.Level;
+
+import org.hibernate.Session;
+import org.hibernate.Transaction;
 
 import com.acuevas.vetstucom.exceptions.DBException;
 import com.acuevas.vetstucom.exceptions.DBException.DBErrors;
 import com.acuevas.vetstucom.exceptions.UserException;
 import com.acuevas.vetstucom.libs.HibernateLib;
+import com.acuevas.vetstucom.model.Expedientes;
 import com.acuevas.vetstucom.model.Storeable;
 import com.acuevas.vetstucom.model.Usuarios;
+import com.acuevas.vetstucom.utils.HibernateUtil;
+import com.acuevas.vetstucom.views.View;
 
 public abstract class VetDAO extends HibernateLib {
 	static {
@@ -68,6 +75,24 @@ public abstract class VetDAO extends HibernateLib {
 		if (obj != null)
 			return obj;
 		throw new DBException(DBErrors.NOT_STORED);
+	}
+
+	// TODO TRANSACTION?
+	public static void deleteUser(String matricula) {
+		Session session = HibernateUtil.getSessionFactory().openSession();
+		Transaction transaction = session.beginTransaction();
+		try {
+			Usuarios user = VetDAO.getUser(matricula);
+			List<Expedientes> expedientes = VetDAO.find(Expedientes.class, "usuarios = '" + user.getId() + "'");
+			expedientes.forEach(expediente -> {
+				VetDAO.erase(expediente);
+			});
+			VetDAO.erase(user);
+		} catch (Exception e) {
+			View.printError(e.getMessage());
+		} finally {
+			session.close();
+		}
 	}
 
 }

@@ -32,7 +32,7 @@ public abstract class Controller {
 		View.printMessage(ViewMessage.WELCOME + " " + loggedInUser.getNombre());
 	}
 
-	public static void showMenu() throws ApplicationException {
+	private static void showMenu() throws ApplicationException {
 		listMenu = MenuService.getMenuList(loggedInUser);
 		View.printMenu(listMenu);
 	}
@@ -41,6 +41,7 @@ public abstract class Controller {
 		boolean exit = false;
 
 		do {
+			showMenu();
 			View.printMessage(ViewMessage.INSERT_OPTION);
 			int input = InputAsker.pedirEntero("");
 			MenuOption selectedOption = listMenu.get(input - 1);
@@ -68,13 +69,14 @@ public abstract class Controller {
 						// TODO THIS
 						break;
 					case LOGOUT:
-						View.printMessage(ViewMessage.GOODBYE);
+						View.printMessage(ViewMessage.SEE_YOU);
 						exit = true;
 						break;
 					case VIEW_RECORDS:
 						viewRecords();
 						break;
 					case VIEW_USERS:
+						viewUsers();
 						break;
 
 					default:
@@ -88,30 +90,28 @@ public abstract class Controller {
 		} while (!exit);
 	}
 
-	private static void viewRecords() {
-		// TODO Auto-generated method stub
+	private static void viewUsers() {
+		List<Usuarios> usuarios = VetDAO.find(Usuarios.class);
+		usuarios.forEach(usuario -> {
+			View.printMessage(usuario.toString());
+		});
+	}
 
+	private static void viewRecords() {
+		List<Expedientes> expedientes = VetDAO.find(Expedientes.class);
+		expedientes.forEach(expediente -> {
+			View.printMessage(expediente.toString());
+		});
 	}
 
 	private static void deleteUser() throws DBException {
-		View.printMessage(ViewMessage.DELETE_ID_USER);
-		int id = InputAsker.pedirEntero("");
-		VetDAO.delete(Usuarios.class, id);
+		View.printMessage(ViewMessage.DELETE_USERNAME_USER);
+		String matricula = InputAsker.pedirCadena("");
+		VetDAO.deleteUser(matricula);
 		View.printMessage(ViewMessage.DELETED_SUCESS);
 	}
 
 	private static void createUser() {
-		// Couldn't separate this into a method because I needed it to return a
-		// boolean(exit or not) and an int(id) at the same time.
-		boolean error = false;
-		boolean exit = false;
-		do {
-			View.printMessage(ViewMessage.INSERT_ID);
-			int id = InputAsker.pedirEntero("");
-			if (id == -1)
-				exit = true;
-			error = checkIdExists(Usuarios.class, id);
-		} while (error && !exit);
 
 		View.printMessage(ViewMessage.NAME_USER);
 		String name = InputAsker.pedirCadena("");
@@ -152,14 +152,14 @@ public abstract class Controller {
 	private static void createRecord() {
 		boolean error = false;
 		boolean exit = false;
-
-		do {
-			View.printMessage(ViewMessage.INSERT_ID);
-			int id = InputAsker.pedirEntero("");
-			if (id == -1)
-				exit = true;
-			error = checkIdExists(Expedientes.class, id);
-		} while (error && !exit);
+// TODO ERASE THIS?
+//		do {
+//			View.printMessage(ViewMessage.INSERT_ID);
+//			int id = InputAsker.pedirEntero("");
+//			if (id == -1)
+//				exit = true;
+//			error = checkIdExists(Expedientes.class, id);
+//		} while (error && !exit);
 
 		if (!exit) {
 			View.printMessage(ViewMessage.NAME_CLIENT);

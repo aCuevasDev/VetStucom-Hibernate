@@ -1,27 +1,53 @@
 package com.acuevas.vetstucom.controller;
 
+import java.util.List;
+
 import com.acuevas.vetstucom.exceptions.ApplicationException;
 import com.acuevas.vetstucom.exceptions.UserException;
 import com.acuevas.vetstucom.utils.HibernateUtil;
+import com.acuevas.vetstucom.utils.MenuOption;
+import com.acuevas.vetstucom.utils.MenuService;
 import com.acuevas.vetstucom.views.View;
+import com.acuevas.vetstucom.views.View.ViewError;
+import com.acuevas.vetstucom.views.View.ViewMessage;
 
 public class Main {
 
+	// TODO DEACTIVATE LAZY "failed to layzily init"
+
 	public static void main(String[] args) {
-
-//		Usuarios user = DAO.getUser("alx");
-//		System.out.println("DNI1: " + user.getDni());
-
 		try {
-			Controller.logIn();
-			Controller.showMenu();
-			Controller.menuSelector();
+			selector();
 		} catch (ApplicationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (UserException e) {
 			View.printError(e.getMessage());
+			View.printError(ViewError.CRITICAL);
+			System.exit(0);
+		} finally {
+			HibernateUtil.close();
 		}
-		HibernateUtil.close();
 	}
+
+	public static void selector() throws ApplicationException {
+		List<MenuOption> options = MenuService.getLoginMenu();
+		View.printMenu(options);
+		View.printMessage(ViewMessage.INSERT_OPTION);
+		int option = InputAsker.pedirEntero("");
+		switch (option) {
+		case 1:
+			try {
+				Controller.logIn();
+				Controller.menuSelector();
+			} catch (UserException e) {
+				View.printError(e.getMessage());
+			}
+			break;
+		case 2:
+			View.printMessage(ViewMessage.GOODBYE);
+			System.exit(0);
+		default:
+			View.printError(ViewError.NO_SUCH_OPTION);
+			break;
+		}
+	}
+
 }

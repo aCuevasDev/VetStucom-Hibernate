@@ -19,6 +19,25 @@ public enum UserPerfil {
 		this.value = value;
 	}
 
+	/**
+	 * DONT USE, ONLY USED IN {@link Usuarios#toString()}
+	 * 
+	 * @param user
+	 * @return
+	 */
+	public static UserPerfil getUserTypeNoThrows(Usuarios user) {
+		switch (user.getTipoUsuario()) {
+		case 1:
+			return UserPerfil.AUXILIAR;
+		case 2:
+			return UserPerfil.VETERINARIO;
+		case 3:
+			return UserPerfil.ADMIN;
+		default:
+			return null;
+		}
+	}
+
 	public static UserPerfil getUserType(Usuarios user) throws ApplicationException {
 		switch (user.getTipoUsuario()) {
 		case 1:

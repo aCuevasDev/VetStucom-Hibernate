@@ -109,4 +109,16 @@ public class Usuarios implements java.io.Serializable, Storeable {
 		this.expedienteses = expedienteses;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return "User: [name=" + nombre + ", surname=" + apellidos + ", dni=" + dni + ", username=" + matricula
+				+ ", password=" + pass + ", type =" + UserPerfil.getUserTypeNoThrows(this) + ", last access="
+				+ ultimoAcceso + "]";
+	}
+
 }

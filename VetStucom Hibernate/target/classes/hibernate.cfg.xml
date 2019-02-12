@@ -7,6 +7,7 @@
   <property name="hibernate.connection.password">vet</property>
   <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/vetstucom?useSSL=false</property>
   <property name="hibernate.connection.username">vet</property>
+  <property name="hibernate.enable_lazy_load_no_trans">true</property>
   <mapping resource="com/acuevas/vetstucom/config/Expedientes.hbm.xml"/>
   <mapping resource="com/acuevas/vetstucom/config/Usuarios.hbm.xml"/>
  </session-factory>

@@ -31,6 +31,8 @@ public abstract class MenuService {
 	private static MenuOption editUser = new MenuOption(Action.EDIT_USER, 7, UserPerfil.ADMIN);
 	private static MenuOption deleteUser = new MenuOption(Action.DELETE_USER, 8, UserPerfil.AUXILIAR);
 	private static MenuOption logout = new MenuOption(Action.LOGOUT, 9, UserPerfil.AUXILIAR);
+	private static MenuOption login = new MenuOption(Action.LOGIN, 0, UserPerfil.AUXILIAR);
+	private static MenuOption exit = new MenuOption(Action.EXIT, 0, UserPerfil.AUXILIAR);
 	// @formatter:on
 
 	static {
@@ -39,6 +41,14 @@ public abstract class MenuService {
 		buildAdminOptions();
 		buildLogOut();
 		order();
+	}
+
+	public static List<MenuOption> getLoginMenu() {
+		List<MenuOption> options = new ArrayList<>();
+		options.add(login);
+		options.add(exit);
+		return options;
+
 	}
 
 	public static List<MenuOption> getMenuList(Usuarios user) throws ApplicationException {
