@@ -17,7 +17,12 @@ public class View {
 		POSTAL_CODE("Please insert the postal code of the client:"),
 		PHONE_CLIENT("Please insert the phone of the client:"),
 		PETS(("Please insert the number of pets the client has:")), PRESS_TO_EXIT("Insert -1 to exit"),
-		DELETE_ID_RECORD("Insert the ID of the record you want to delete."), DELETED_SUCESS("Deleted successfully.");
+		DELETE_ID_RECORD("Insert the ID of the record you want to delete."), DELETED_SUCESS("Deleted successfully."),
+		ASK_MATRICULA("Please insert the user's username."), ASK_PASSWORD("Please insert the password"),
+		ASK_TIPO("Plese insert the type: aux(1),vet(2),admin(3)"), DNI_USER("Please insert the dni"),
+		SURNAME_USER("Please insert the surname"), NAME_USER("Please insert the name"),
+		DELETE_ID_USER("Insert the ID of the user you want to delete."), GOODBYE("Goodbye!"),
+		LOADING("--------------LOADING-------------"), COMPLETE("--------------COMPLETE-------------");
 
 		private String message;
 

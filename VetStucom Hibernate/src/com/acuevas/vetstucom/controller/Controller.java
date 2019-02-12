@@ -1,9 +1,12 @@
 package com.acuevas.vetstucom.controller;
 
+import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 
 import com.acuevas.vetstucom.exceptions.ApplicationException;
+import com.acuevas.vetstucom.exceptions.ApplicationException.AppErrors;
 import com.acuevas.vetstucom.exceptions.DBException;
 import com.acuevas.vetstucom.exceptions.UserException;
 import com.acuevas.vetstucom.exceptions.UserException.UserErrors;
@@ -22,10 +25,16 @@ public abstract class Controller {
 	private static Usuarios loggedInUser = null;
 	private static List<MenuOption> listMenu = null;
 
+	public static void welcome() throws ApplicationException {
+		if (loggedInUser == null)
+			throw new ApplicationException(AppErrors.USER_MUST_BE_LOGGED);
+
+		View.printMessage(ViewMessage.WELCOME + " " + loggedInUser.getNombre());
+	}
+
 	public static void showMenu() throws ApplicationException {
 		listMenu = MenuService.getMenuList(loggedInUser);
 		View.printMenu(listMenu);
-		View.printMessage(ViewMessage.WELCOME + " " + loggedInUser.getNombre());
 	}
 
 	public static void menuSelector() throws UserException, ApplicationException {
@@ -47,16 +56,23 @@ public abstract class Controller {
 						deleteRecord();
 						break;
 					case EDIT_RECORD:
+						// TODO THIS
 						break;
 					case CREATE_USER:
+						createUser();
 						break;
 					case DELETE_USER:
+						deleteUser();
 						break;
 					case EDIT_USER:
+						// TODO THIS
 						break;
 					case LOGOUT:
+						View.printMessage(ViewMessage.GOODBYE);
+						exit = true;
 						break;
 					case VIEW_RECORDS:
+						viewRecords();
 						break;
 					case VIEW_USERS:
 						break;
@@ -69,7 +85,51 @@ public abstract class Controller {
 				}
 			} else
 				throw new UserException(UserErrors.OPTION_NOT_VALID);
-		} while (exit); // TODO CHANGE THIS BOOLEAN, AND THE VALUE IS WRONG ON PURPOSE
+		} while (!exit);
+	}
+
+	private static void viewRecords() {
+		// TODO Auto-generated method stub
+
+	}
+
+	private static void deleteUser() throws DBException {
+		View.printMessage(ViewMessage.DELETE_ID_USER);
+		int id = InputAsker.pedirEntero("");
+		VetDAO.delete(Usuarios.class, id);
+		View.printMessage(ViewMessage.DELETED_SUCESS);
+	}
+
+	private static void createUser() {
+		// Couldn't separate this into a method because I needed it to return a
+		// boolean(exit or not) and an int(id) at the same time.
+		boolean error = false;
+		boolean exit = false;
+		do {
+			View.printMessage(ViewMessage.INSERT_ID);
+			int id = InputAsker.pedirEntero("");
+			if (id == -1)
+				exit = true;
+			error = checkIdExists(Usuarios.class, id);
+		} while (error && !exit);
+
+		View.printMessage(ViewMessage.NAME_USER);
+		String name = InputAsker.pedirCadena("");
+		View.printMessage(ViewMessage.SURNAME_USER);
+		String surname = InputAsker.pedirCadena("");
+		View.printMessage(ViewMessage.DNI_USER);
+		String dni = InputAsker.pedirCadena("");
+		View.printMessage(ViewMessage.ASK_MATRICULA);
+		String matricula = InputAsker.pedirCadena("");
+		Date curdate = new Date(); // last access
+		View.printMessage(ViewMessage.ASK_PASSWORD);
+		String pass = InputAsker.pedirCadena("");
+		View.printMessage(ViewMessage.ASK_TIPO);
+		Integer tipo = InputAsker.pedirEntero("");
+
+		Usuarios user = new Usuarios(name, surname, dni, matricula, pass, tipo, curdate, new HashSet<Expedientes>());
+		VetDAO.store(user);
+
 	}
 
 	private static void deleteRecord() throws DBException {
@@ -77,6 +137,16 @@ public abstract class Controller {
 		int id = InputAsker.pedirEntero("");
 		VetDAO.delete(Expedientes.class, id);
 		View.printMessage(ViewMessage.DELETED_SUCESS);
+	}
+
+	public static <T> boolean checkIdExists(Class<T> objClass, Serializable id) {
+		if (VetDAO.isStored(objClass, id)) {
+			View.printError(ViewError.ID_ALREADY_EXISTS);
+			View.printMessage(ViewMessage.PRESS_TO_EXIT);
+			return true;
+		}
+		return false;
+
 	}
 
 	private static void createRecord() {
@@ -88,11 +158,7 @@ public abstract class Controller {
 			int id = InputAsker.pedirEntero("");
 			if (id == -1)
 				exit = true;
-			if (VetDAO.isStored(Expedientes.class, id)) {
-				error = true;
-				View.printError(ViewError.ID_ALREADY_EXISTS);
-				View.printMessage(ViewMessage.PRESS_TO_EXIT);
-			}
+			error = checkIdExists(Expedientes.class, id);
 		} while (error && !exit);
 
 		if (!exit) {
@@ -121,13 +187,14 @@ public abstract class Controller {
 	 * Logs the user into the system asking for his credentials.
 	 * 
 	 * @throws UserException
+	 * @throws ApplicationException
 	 */
-	public static void logIn() throws UserException {
+	public static void logIn() throws UserException, ApplicationException {
 		View.printMessage(ViewMessage.INSERT_MATRICULA);
 		String matricula = InputAsker.pedirCadena("");
 		View.printMessage(ViewMessage.INSERT_PASSWORD);
 		String pswrd = InputAsker.pedirCadena("");
-
+		View.printMessage(ViewMessage.LOADING);
 		Usuarios storedUser = VetDAO.getUser(matricula);
 		try {
 			VetDAO.isStored(storedUser);
@@ -137,7 +204,8 @@ public abstract class Controller {
 
 		checkCredentials(matricula, pswrd, storedUser);
 		loggedInUser = storedUser;
-
+		View.printMessage(ViewMessage.COMPLETE);
+		welcome();
 	}
 
 	/**
