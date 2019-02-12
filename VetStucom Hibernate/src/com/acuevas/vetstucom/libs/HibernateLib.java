@@ -20,7 +20,7 @@ public abstract class HibernateLib {
 		// Criteria, and this exercise is about using "raw" Hibernate.
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		Criteria criteria = session.createCriteria(objClass);
-		// use JPA instead?
+
 		T result = (T) criteria.add(Restrictions.eq(keyColumn, key)).uniqueResult();
 		session.close();
 		return result;
