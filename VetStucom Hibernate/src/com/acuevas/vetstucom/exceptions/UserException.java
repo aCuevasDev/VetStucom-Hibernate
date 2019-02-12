@@ -10,7 +10,8 @@ public class UserException extends Exception {
 	private static final long serialVersionUID = -3436387005310241193L;
 
 	public enum UserErrors {
-		WRONG_CREDENTIALS("Username or password incorrect."), OPTION_NOT_VALID("Option not valid.");
+		WRONG_CREDENTIALS("Username or password incorrect."), OPTION_NOT_VALID("Option not valid."),
+		USER_ALREADY_EXISTS("Username already in use");
 
 		private String message;
 

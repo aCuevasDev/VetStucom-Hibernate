@@ -57,7 +57,7 @@ public abstract class Controller {
 						deleteRecord();
 						break;
 					case EDIT_RECORD:
-						// TODO THIS
+						editRecord();
 						break;
 					case CREATE_USER:
 						createUser();
@@ -90,20 +90,112 @@ public abstract class Controller {
 		} while (!exit);
 	}
 
+	private static void editRecord() {
+		Expedientes record;
+		do {
+			View.printMessage(ViewMessage.ASK_RECORD);
+			int id = InputAsker.pedirEntero("");
+			record = VetDAO.getRecord(id);
+			if (record == null)
+				View.printMessage(ViewMessage.WRONG_ID);
+		} while (record == null);
+
+		View.printMessage(ViewMessage.SEPARATOR);
+		View.printMessage(record.toString());
+		View.printMessage(ViewMessage.SEPARATOR);
+
+		recordPropertiesSelector(record);
+
+	}
+
+	private static void recordPropertiesSelector(Expedientes record) {
+		int option;
+		String data;
+		int num;
+		do {
+			View.printMessage(ViewMessage.ASK_MODIFY);
+			View.printRecordProperties();
+
+			option = InputAsker.pedirEntero("");
+			switch (option) {
+			case 1:
+				View.printMessage(ViewMessage.ASK_MATRICULA);
+				String matricula = InputAsker.pedirCadena("");
+				Usuarios user = VetDAO.getUser(matricula);
+				if (user != null) {
+					record.setUsuarios(user);
+				} else
+					View.printError(ViewError.NO_SUCH_USER);
+				break;
+			case 2:
+				View.printMessage(ViewMessage.ASK_DATA);
+				data = InputAsker.pedirCadena("");
+				record.setNombre(data);
+				break;
+			case 3:
+				View.printMessage(ViewMessage.ASK_DATA);
+				data = InputAsker.pedirCadena("");
+				record.setApellidos(data);
+				break;
+			case 4:
+				View.printMessage(ViewMessage.ASK_DATA);
+				data = InputAsker.pedirCadena("");
+				record.setDni(data);
+				break;
+			case 5:
+				View.printMessage(ViewMessage.ASK_DATA);
+				num = InputAsker.pedirEntero("");
+				record.setCp("" + num);
+				break;
+			case 6:
+				View.printMessage(ViewMessage.ASK_DATA);
+				num = InputAsker.pedirEntero("");
+				record.setTelefono("" + num);
+				break;
+			case 7:
+				View.printMessage(ViewMessage.ASK_DATA);
+				num = InputAsker.pedirEntero("");
+				record.setNMascotas(num);
+				break;
+			case 8:
+				VetDAO.store(record);
+				break;
+			default:
+				View.printError(ViewError.NO_SUCH_OPTION);
+				break;
+			}
+		} while (option != 8);
+	}
+
+	/**
+	 * Shows all the users in the DB.
+	 */
 	private static void viewUsers() {
+		View.printMessage(ViewMessage.SEPARATOR);
 		List<Usuarios> usuarios = VetDAO.find(Usuarios.class);
 		usuarios.forEach(usuario -> {
 			View.printMessage(usuario.toString());
 		});
+		View.printMessage(ViewMessage.SEPARATOR);
 	}
 
+	/**
+	 * Shows all the records in the DB.
+	 */
 	private static void viewRecords() {
+		View.printMessage(ViewMessage.SEPARATOR);
 		List<Expedientes> expedientes = VetDAO.find(Expedientes.class);
 		expedientes.forEach(expediente -> {
 			View.printMessage(expediente.toString());
 		});
+		View.printMessage(ViewMessage.SEPARATOR);
 	}
 
+	/**
+	 * Deletes a user from the DB calling the DAO.
+	 * 
+	 * @throws DBException
+	 */
 	private static void deleteUser() throws DBException {
 		View.printMessage(ViewMessage.DELETE_USERNAME_USER);
 		String matricula = InputAsker.pedirCadena("");
@@ -111,7 +203,12 @@ public abstract class Controller {
 		View.printMessage(ViewMessage.DELETED_SUCESS);
 	}
 
-	private static void createUser() {
+	/**
+	 * Creates a new user and stores it.
+	 * 
+	 * @throws UserException
+	 */
+	private static void createUser() throws UserException {
 
 		View.printMessage(ViewMessage.NAME_USER);
 		String name = InputAsker.pedirCadena("");
@@ -121,17 +218,28 @@ public abstract class Controller {
 		String dni = InputAsker.pedirCadena("");
 		View.printMessage(ViewMessage.ASK_MATRICULA);
 		String matricula = InputAsker.pedirCadena("");
-		Date curdate = new Date(); // last access
-		View.printMessage(ViewMessage.ASK_PASSWORD);
-		String pass = InputAsker.pedirCadena("");
-		View.printMessage(ViewMessage.ASK_TIPO);
-		Integer tipo = InputAsker.pedirEntero("");
 
-		Usuarios user = new Usuarios(name, surname, dni, matricula, pass, tipo, curdate, new HashSet<Expedientes>());
-		VetDAO.store(user);
+		if (VetDAO.getUser(matricula) == null) {
+
+			Date curdate = new Date(); // last access
+			View.printMessage(ViewMessage.ASK_PASSWORD);
+			String pass = InputAsker.pedirCadena("");
+			View.printMessage(ViewMessage.ASK_TIPO);
+			Integer tipo = InputAsker.pedirEntero("");
+
+			Usuarios user = new Usuarios(name, surname, dni, matricula, pass, tipo, curdate,
+					new HashSet<Expedientes>());
+			VetDAO.store(user);
+		} else
+			throw new UserException(UserErrors.USER_ALREADY_EXISTS);
 
 	}
 
+	/**
+	 * Deletes a record from the DB making calls to DAO.
+	 * 
+	 * @throws DBException
+	 */
 	private static void deleteRecord() throws DBException {
 		View.printMessage(ViewMessage.DELETE_ID_RECORD);
 		int id = InputAsker.pedirEntero("");
@@ -139,6 +247,13 @@ public abstract class Controller {
 		View.printMessage(ViewMessage.DELETED_SUCESS);
 	}
 
+	/**
+	 * Checks if an object exists in the DB
+	 * 
+	 * @param objClass
+	 * @param id
+	 * @return
+	 */
 	public static <T> boolean checkIdExists(Class<T> objClass, Serializable id) {
 		if (VetDAO.isStored(objClass, id)) {
 			View.printError(ViewError.ID_ALREADY_EXISTS);
@@ -149,17 +264,12 @@ public abstract class Controller {
 
 	}
 
+	/**
+	 * Creates a new record.
+	 */
 	private static void createRecord() {
 		boolean error = false;
 		boolean exit = false;
-// TODO ERASE THIS?
-//		do {
-//			View.printMessage(ViewMessage.INSERT_ID);
-//			int id = InputAsker.pedirEntero("");
-//			if (id == -1)
-//				exit = true;
-//			error = checkIdExists(Expedientes.class, id);
-//		} while (error && !exit);
 
 		if (!exit) {
 			View.printMessage(ViewMessage.NAME_CLIENT);

@@ -33,6 +33,16 @@ public abstract class VetDAO extends HibernateLib {
 	}
 
 	/**
+	 * Gets a record from the db by their {@link Expedientes#id}
+	 * 
+	 * @param key
+	 * @return
+	 */
+	public static Expedientes getRecord(Serializable key) {
+		return getByKey(Expedientes.class, key);
+	}
+
+	/**
 	 * Saves or updates an object into the db.
 	 * 
 	 * @param obj
@@ -56,6 +66,13 @@ public abstract class VetDAO extends HibernateLib {
 		return false;
 	}
 
+	/**
+	 * Deletes an object from the db.
+	 * 
+	 * @param objClass
+	 * @param id
+	 * @throws DBException
+	 */
 	public static <T> void delete(Class<T> objClass, Serializable id) throws DBException {
 		Storeable obj = (Storeable) getByKey(objClass, id);
 		if (obj != null)
@@ -77,7 +94,11 @@ public abstract class VetDAO extends HibernateLib {
 		throw new DBException(DBErrors.NOT_STORED);
 	}
 
-	// TODO TRANSACTION?
+	/**
+	 * Deletes a user from the db deleting all the records before.
+	 * 
+	 * @param matricula
+	 */
 	public static void deleteUser(String matricula) {
 		Session session = HibernateUtil.getSessionFactory().openSession();
 		Transaction transaction = session.beginTransaction();
@@ -88,7 +109,9 @@ public abstract class VetDAO extends HibernateLib {
 				VetDAO.erase(expediente);
 			});
 			VetDAO.erase(user);
+			transaction.commit();
 		} catch (Exception e) {
+			transaction.rollback();
 			View.printError(e.getMessage());
 		} finally {
 			session.close();

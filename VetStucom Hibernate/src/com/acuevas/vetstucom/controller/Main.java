@@ -28,26 +28,29 @@ public class Main {
 	}
 
 	public static void selector() throws ApplicationException {
-		List<MenuOption> options = MenuService.getLoginMenu();
-		View.printMenu(options);
-		View.printMessage(ViewMessage.INSERT_OPTION);
-		int option = InputAsker.pedirEntero("");
-		switch (option) {
-		case 1:
-			try {
-				Controller.logIn();
-				Controller.menuSelector();
-			} catch (UserException e) {
-				View.printError(e.getMessage());
+		int option;
+		do {
+			List<MenuOption> options = MenuService.getLoginMenu();
+			View.printMenu(options);
+			View.printMessage(ViewMessage.INSERT_OPTION);
+			option = InputAsker.pedirEntero("");
+			switch (option) {
+			case 1:
+				try {
+					Controller.logIn();
+					Controller.menuSelector();
+				} catch (UserException e) {
+					View.printError(e.getMessage());
+				}
+				break;
+			case 2:
+				View.printMessage(ViewMessage.GOODBYE);
+				System.exit(0);
+			default:
+				View.printError(ViewError.NO_SUCH_OPTION);
+				break;
 			}
-			break;
-		case 2:
-			View.printMessage(ViewMessage.GOODBYE);
-			System.exit(0);
-		default:
-			View.printError(ViewError.NO_SUCH_OPTION);
-			break;
-		}
+		} while (option != 2);
 	}
 
 }

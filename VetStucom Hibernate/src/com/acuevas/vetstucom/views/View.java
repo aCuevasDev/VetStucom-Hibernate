@@ -23,7 +23,9 @@ public class View {
 		SURNAME_USER("Please insert the surname"), NAME_USER("Please insert the name"),
 		DELETE_USERNAME_USER("Insert the username of the user you want to delete."), GOODBYE("Goodbye!"),
 		LOADING("--------------LOADING-------------"), COMPLETE("--------------COMPLETE-------------"),
-		SEE_YOU("See you!");
+		SEE_YOU("See you!"), SEPARATOR("***************************************"),
+		ASK_RECORD("Insert the ID of the record you want to modify"), WRONG_ID("Wrong ID, Object doesn't exist"),
+		ASK_MODIFY("What do you want to modify?"), ASK_DATA("Insert the new value");
 
 		private String message;
 
@@ -45,7 +47,7 @@ public class View {
 
 	public enum ViewError {
 		ID_ALREADY_EXISTS("This id already exists."), NO_SUCH_OPTION("There's no such option"),
-		CRITICAL("CRITICAL ERROR, CLOSING NOW");
+		CRITICAL("CRITICAL ERROR, CLOSING NOW"), NO_SUCH_USER("THERE'S NO SUCH USER");
 
 		private String message;
 
@@ -64,6 +66,17 @@ public class View {
 		for (MenuOption menuOption : options) {
 			System.out.println(index++ + ". " + menuOption.getAction().toString());
 		}
+	}
+
+	public static void printRecordProperties() {
+		System.out.println("1. User");
+		System.out.println("2. Name");
+		System.out.println("3. Surname");
+		System.out.println("4. Dni");
+		System.out.println("5. Postal code");
+		System.out.println("6. Phone");
+		System.out.println("7. Pet number");
+		System.out.println("8. Exit");
 	}
 
 	public static void printError(String error) {
