@@ -14,11 +14,13 @@ import com.acuevas.vetstucom.model.Usuarios;
 public class MenuOption implements Comparable<MenuOption> {
 
 	public enum Actions {
-		VIEW_RECORDS, VIEW_USERS, CREATE_RECORD, EDIT_RECORD, DELETE_RECORD, CREATE_USER, EDIT_USER, DELETE_USER, LOGOUT
-		
+		VIEW_RECORDS("View Records."), VIEW_USERS("View Users."), CREATE_RECORD("Create Record."),
+		DELETE_RECORD("Delete Record."), EDIT_RECORD("Edit Record."), CREATE_USER("Create User."),
+		EDIT_USER("Edit User."), DELETE_USER("Delete User."), LOGOUT("Log out.");
+
 		private String message;
 
-		private MenuMessages(String message) {
+		private Actions(String message) {
 			this.message = message;
 		}
 
